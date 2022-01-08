@@ -14,16 +14,18 @@ output = [inputs[0]*w1[0] + inputs[1]*w1[1] + inputs[2]*w1[2] + inputs[3]*w1[3] 
         ]
 
 
-# Representation (4 inputs, 3 neurons)
-#    x=a[0]    a[1]
-# 
-#     O
-#                O 
-#     O 
-#                O 
-#     O
-#                O
-#     O
+"""
+Representation (4 inputs, 3 neurons)
+   x=a[0]    a[1]
+
+    O
+               O 
+    O 
+               O 
+    O
+               O
+    O
+"""
 
 print("Basic: ", output)
 
@@ -88,9 +90,10 @@ print("Layer 2 output: ", layer_2.output)
 
 # •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
-# np.random.seed(0) may not give the same results in jupyter nb etc as datatype might change during the
-# calculations, so nnfs.init() does the seed work along with setting a default datatype for numpy use
-
+"""
+np.random.seed(0) may not give the same results in jupyter nb etc as datatype might change during the
+calculations, so nnfs.init() does the seed work along with setting a default datatype for numpy use
+"""
 import nnfs
 
 nnfs.init()
@@ -109,13 +112,16 @@ layer_1_new = Layer_Dense(2,5)
 
 # Integrating Hidden Layer Activation Functions
 
-# We use Activation Functions as without it we only will be able to compute linear outputs even for 
-# non linear data, we'll only be able to fit the model using a linear function which is not efficient.
+"""
+• We use Activation Functions as without it we only will be able to compute linear outputs even for 
+non linear data, we'll only be able to fit the model using a linear function which is not efficient.
 
-# Sigmoid has vanishing gradient problem.
-# Reasons we use ReLU:
-#     • It's granular
-#     • Very fast 
+• Sigmoid has vanishing gradient problem.
+
+• Reasons we use ReLU:
+    1) It's granular
+    2) Very fast 
+"""
 
 class Activation_ReLU:
     def forward(self,inputs):
@@ -152,3 +158,4 @@ activation_2.forward(dense_2.output)
 print("Softmax: ", activation_2.output[:5])
 
 # •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+
