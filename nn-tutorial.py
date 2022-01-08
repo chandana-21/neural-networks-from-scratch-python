@@ -13,6 +13,7 @@ output = [inputs[0]*w1[0] + inputs[1]*w1[1] + inputs[2]*w1[2] + inputs[3]*w1[3] 
           inputs[0]*w3[0] + inputs[1]*w3[1] + inputs[2]*w3[2] + inputs[3]*w3[3] + b3
         ]
 
+
 # Representation (4 inputs, 3 neurons)
 #    x=a[0]    a[1]
 # 
@@ -25,6 +26,8 @@ output = [inputs[0]*w1[0] + inputs[1]*w1[1] + inputs[2]*w1[2] + inputs[3]*w1[3] 
 #     O
 
 print("Basic: ", output)
+
+# •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
 # Vectorized
 
@@ -40,6 +43,8 @@ output = np.dot(weights, inputs) + biases
 
 print("Vectorized: ", output)
 
+# •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+
 # Multiple Inputs (3 examples)
 
 inputs_matrix = [[1,2,3,2.5],
@@ -49,6 +54,8 @@ inputs_matrix = [[1,2,3,2.5],
 output_matrix = np.dot(inputs_matrix, np.array(weights).T) + biases
 
 print("Matrix: ",output_matrix)
+
+# •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
 # Layers and Random Initialization of weights and biases
 
@@ -79,6 +86,8 @@ layer_2.forward(layer_1.output)
 
 print("Layer 2 output: ", layer_2.output)
 
+# •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+
 # np.random.seed(0) may not give the same results in jupyter nb etc as datatype might change during the
 # calculations, so nnfs.init() does the seed work along with setting a default datatype for numpy use
 
@@ -86,8 +95,19 @@ import nnfs
 
 nnfs.init()
 
-# Integrating Hidden Layer Activation Functions
 
+# Using external dataset
+
+from nnfs.datasets import spiral_data
+
+X, y = spiral_data(100,3) # (samples, classes)
+# X (100 samples, 2 input features)
+
+layer_1_new = Layer_Dense(2,5)
+
+# •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+
+# Integrating Hidden Layer Activation Functions
 
 # We use Activation Functions as without it we only will be able to compute linear outputs even for 
 # non linear data, we'll only be able to fit the model using a linear function which is not efficient.
@@ -101,3 +121,32 @@ class Activation_ReLU:
     def forward(self,inputs):
         self.output = np.maximum(0, inputs)
 
+activation_1 = Activation_ReLU()
+layer_1_new.forward(X)
+activation_1.forward(layer_1_new.output)
+
+print("ReLU: ", activation_1.output[:5])
+
+# •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+
+# Softmax Activation
+
+class Activation_Softmax:
+    def forward(self, inputs):
+        exp_values = np.exp(inputs - np.max(inputs, axis=1, keepdims=True))
+        probabilities = exp_values/np.sum(exp_values, axis=1, keepdims=True)
+        self.output = probabilities
+
+dense_1 = Layer_Dense(2,3)
+activation_1 = Activation_ReLU()
+
+dense_2 = Layer_Dense(3,3)
+activation_2 = Activation_Softmax()
+
+dense_1.forward(X)
+activation_1.forward(dense_1.output)
+
+dense_2.forward(activation_1.output)
+activation_2.forward(dense_2.output)
+
+print("Softmax: ", activation_2.output[:5])
