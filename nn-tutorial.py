@@ -150,3 +150,5 @@ dense_2.forward(activation_1.output)
 activation_2.forward(dense_2.output)
 
 print("Softmax: ", activation_2.output[:5])
+
+# •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
