@@ -159,3 +159,38 @@ print("Softmax: ", activation_2.output[:5])
 
 # •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
+# Implementing Loss
+
+class Loss:
+    def calculate(self,output,y):
+        sample_losses = self.forward(output,y)
+        data_loss = np.mean(sample_losses)
+        return data_loss
+
+class Loss_CategoricalCrossentropy(Loss):
+    def forward(self, y_pred, y_true):
+        samples = len(y_pred)
+
+        # clipping so that -log(0) situation does not occur
+        y_pred_clipped = np.clip(y_pred, 1e-7, 1-1e-7) 
+
+        # This means that the person has passed scaler values and not the one-hot encoded values
+        if len(y_true.shape) == 1: 
+            correct_confidences = y_pred_clipped[range(samples), y_true]
+
+        # one-hot encoded vectors passed here
+        elif len(y_true.shape) == 2: 
+            correct_confidences = np.sum(y_pred_clipped*y_true, axis=1)
+
+        negative_log_likelihoods = -np.log(correct_confidences)
+        return negative_log_likelihoods
+
+loss_function = Loss_CategoricalCrossentropy()
+loss = loss_function.calculate(activation_2.output, y)
+
+print("Loss: ", loss)
+
+# •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+
+#  Introducing Optimization and derivatives
+

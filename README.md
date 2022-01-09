@@ -1,1 +1,3 @@
 # neural-networks-from-scratch-python
+
+In progress...
