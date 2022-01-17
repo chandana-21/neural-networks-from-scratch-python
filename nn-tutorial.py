@@ -192,5 +192,5 @@ print("Loss: ", loss)
 
 # •••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
 
-#  Introducing Optimization and derivatives
+#  Backpropagation
 
